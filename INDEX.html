@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sanjay Kumar – Data Analyst Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #00e5a0;
+      --accent2: #7c6eff;
+      --accent3: #ff6b6b;
+      --text: #e8e8f0;
+      --muted: #6b6b85;
+      --card: #13131c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,15,0.7);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 5vw 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Mesh gradient blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      opacity: 0.15;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent); top: -100px; right: -150px; animation: float1 12s ease-in-out infinite; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: 0; left: -100px; animation: float2 15s ease-in-out infinite; }
+    .blob-3 { width: 250px; height: 250px; background: var(--accent3); top: 40%; left: 30%; animation: float1 9s ease-in-out infinite reverse; }
+
+    @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-30px)} }
+
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--accent); }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero-name span { color: var(--accent); font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+
+    .hero-role {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--muted);
+      margin-top: 1rem;
+      font-weight: 600;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      margin-top: 2rem;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--muted);
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0a0f;
+      border: 1px solid var(--accent);
+      font-weight: 500;
+    }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 5vw; }
+
+    .section-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-tag::before { content: '//'; color: var(--accent2); }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-text p { font-size: 0.9rem; line-height: 1.9; color: var(--muted); margin-bottom: 1.2rem; }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+
+    .contact-list { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .contact-list li .icon {
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      background: var(--card);
+    }
+    .contact-list a { color: var(--accent); text-decoration: none; }
+
+    /* Skills panel */
+    .skills-panel { display: flex; flex-direction: column; gap: 1rem; }
+
+    .skill-category {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem 1.5rem;
+    }
+    .skill-cat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.75rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag {
+      font-size: 0.72rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      background: rgba(0,229,160,0.07);
+      border: 1px solid rgba(0,229,160,0.2);
+      color: var(--accent);
+      letter-spacing: 0.03em;
+    }
+    .skill-tag.purple {
+      background: rgba(124,110,255,0.07);
+      border-color: rgba(124,110,255,0.25);
+      color: var(--accent2);
+    }
+    .skill-tag.red {
+      background: rgba(255,107,107,0.07);
+      border-color: rgba(255,107,107,0.25);
+      color: var(--accent3);
+    }
+
+    /* ── PROJECTS ── */
+    #projects {}
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover { border-color: rgba(0,229,160,0.3); transform: translateY(-4px); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      top: 0.5rem; right: 1rem;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .project-icon {
+      width: 42px; height: 42px;
+      border-radius: 8px;
+      background: rgba(0,229,160,0.1);
+      border: 1px solid rgba(0,229,160,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .project-desc {
+      font-size: 0.8rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .project-bullets { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .project-bullets li {
+      font-size: 0.76rem;
+      color: var(--muted);
+      display: flex;
+      gap: 0.6rem;
+      line-height: 1.6;
+    }
+    .project-bullets li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+    .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tech-badge {
+      font-size: 0.66rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .exp-entry {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-entry:last-child { border-bottom: none; }
+
+    .exp-meta { padding-top: 0.2rem; }
+    .exp-period { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
+    .exp-company {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+    .exp-location { font-size: 0.7rem; color: var(--muted); margin-top: 0.25rem; }
+
+    .exp-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .exp-points { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .exp-points li {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex; gap: 0.75rem; line-height: 1.65;
+    }
+    .exp-points li::before { content: '▸'; color: var(--accent); flex-shrink: 0; font-size: 0.7rem; margin-top: 0.15rem; }
+
+    /* ── CERTIFICATIONS ── */
+    #certifications {}
+
+    .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+
+    .cert-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.8rem;
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .cert-card:hover { border-color: rgba(124,110,255,0.4); transform: translateY(-3px); }
+
+    .cert-logo {
+      width: 48px; height: 48px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+    .cert-logo.deloitte { background: rgba(124,110,255,0.1); border: 1px solid rgba(124,110,255,0.3); color: var(--accent2); }
+    .cert-logo.tata { background: rgba(0,229,160,0.1); border: 1px solid rgba(0,229,160,0.3); color: var(--accent); }
+
+    .cert-body {}
+    .cert-issuer { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .cert-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3; letter-spacing: -0.01em; }
+    .cert-date { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.75rem; }
+    .cert-highlights { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .cert-highlights li { font-size: 0.73rem; color: var(--muted); display: flex; gap: 0.5rem; line-height: 1.5; }
+    .cert-highlights li::before { content: '·'; color: var(--accent2); }
+
+    /* ── EDUCATION ── */
+    #education { background: var(--surface); border-top: 1px solid var(--border); }
+
+    .edu-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2.5rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;
+      max-width: 700px;
+    }
+    .edu-degree { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    .edu-institution { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.25rem; }
+    .edu-period { font-size: 0.75rem; color: var(--muted); }
+    .gpa-ring {
+      text-align: center;
+      background: rgba(0,229,160,0.05);
+      border: 1px solid rgba(0,229,160,0.2);
+      border-radius: 8px;
+      padding: 1.2rem 1.8rem;
+    }
+    .gpa-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .gpa-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.2rem; }
+
+    /* ── STRENGTHS ── */
+    #strengths {}
+
+    .strengths-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+
+    .strength-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: var(--card);
+      transition: border-color 0.3s;
+    }
+    .strength-item:hover { border-color: rgba(0,229,160,0.3); }
+    .strength-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .strength-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .strength-text { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 5vw;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--accent); }
+    .footer-text { font-size: 0.72rem; color: var(--muted); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 6rem 5vw 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .exp-entry { grid-template-columns: 1fr; gap: 0.75rem; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SK_</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#education">Education</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="hero-tag">Available for Opportunities</div>
+
+    <h1 class="hero-name">
+      Sanjay<br>
+      <span>Kumar</span>
+    </h1>
+    <div class="hero-role">Data Analyst</div>
+    <p class="hero-desc">
+      Detail-oriented data analyst with hands-on experience in data collection, cleansing, transformation, and exploratory analysis. Specialising in Python, SQL, and Power BI to turn raw data into actionable insights.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="mailto:ummadisittysanjay@gmail.com" class="btn btn-outline">Get in Touch</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div>
+        <div class="stat-num">10K+</div>
+        <div class="stat-label">Records Processed</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <div class="section-tag">About Me</div>
+        <h2 class="section-title">Turning Data<br>Into Decisions</h2>
+        <p>
+          I'm a <strong>Data Analyst</strong> based in Hyderabad with a B.Sc. in Computer Science & Mathematics, passionate about the full data pipeline—from raw ingestion to polished insight.
+        </p>
+        <p>
+          My work spans <strong>gap analysis reports, delta reports, data enrichment</strong>, and visual dashboards. I thrive in structured, data-driven environments where attention to quality and documentation makes the difference.
+        </p>
+        <ul class="contact-list">
+          <li><span class="icon">✉</span><a href="mailto:ummadisittysanjay@gmail.com">ummadisittysanjay@gmail.com</a></li>
+          <li><span class="icon">📞</span>+91-8688836995</li>
+          <li><span class="icon">in</span><a href="https://linkedin.com/in/sanjaykumar5555" target="_blank">linkedin.com/in/sanjaykumar5555</a></li>
+          <li><span class="icon">📍</span>Hyderabad, India</li>
+        </ul>
+      </div>
+
+      <div class="skills-panel">
+        <div class="skill-category">
+          <div class="skill-cat-label">Data Management</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Data Collection</span>
+            <span class="skill-tag">Data Cleansing</span>
+            <span class="skill-tag">Data Transformation</span>
+            <span class="skill-tag">Data Validation</span>
+            <span class="skill-tag">Data Quality Checks</span>
+            <span class="skill-tag">EDA</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-label">Programming & Databases</div>
+          <div class="skill-tags">
+            <span class="skill-tag purple">Python</span>
+            <span class="skill-tag purple">Pandas</span>
+            <span class="skill-tag purple">NumPy</span>
+            <span class="skill-tag purple">SQL / MySQL</span>
+            <span class="skill-tag purple">HTML</span>
+            <span class="skill-tag purple">CSS</span>
+            <span class="skill-tag purple">JavaScript</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-label">Reporting & Visualisation</div>
+          <div class="skill-tags">
+            <span class="skill-tag red">Power BI</span>
+            <span class="skill-tag red">Matplotlib</span>
+            <span class="skill-tag red">Excel / Pivot Tables</span>
+            <span class="skill-tag red">Gap Analysis</span>
+            <span class="skill-tag red">Delta Reports</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-label">Tools & Concepts</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Git / GitHub</span>
+            <span class="skill-tag">VS Code</span>
+            <span class="skill-tag">Data Governance</span>
+            <span class="skill-tag">Statistics</span>
+            <span class="skill-tag">Information Management</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-tag reveal">Projects</div>
+    <h2 class="section-title reveal">Selected Work</h2>
+
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <div class="project-card reveal">
+        <div class="project-number">01</div>
+        <div class="project-icon">📱</div>
+        <div class="project-title">Google Play Store Data Analysis</div>
+        <p class="project-desc">End-to-end EDA on 10,000+ app records to ensure quality, consistency, and actionable insight.</p>
+        <ul class="project-bullets">
+          <li>Data collection, cleansing, and transformation across 10K+ records</li>
+          <li>Quality checks for compliance across categories, ratings, and pricing</li>
+          <li>EDA to identify correlations, trends, and factors affecting user ratings</li>
+          <li>Data enrichment insights: gaps, discrepancies, and value mismatches</li>
+          <li>Visualisations via Matplotlib & Excel to communicate findings</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">Pandas</span>
+          <span class="tech-badge">NumPy</span>
+          <span class="tech-badge">Matplotlib</span>
+          <span class="tech-badge">EDA</span>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal">
+        <div class="project-number">02</div>
+        <div class="project-icon">📊</div>
+        <div class="project-title">RBI State-wise Economic Analysis</div>
+        <p class="project-desc">State-level economic indicator analysis using RBI publications with comprehensive gap and delta reporting.</p>
+        <ul class="project-bullets">
+          <li>Collected & processed income, population, and poverty datasets</li>
+          <li>Data validation and quality checks for state-level accuracy</li>
+          <li>Gap Analysis Reports on regional disparities and missing values</li>
+          <li>Delta Reports comparing year-on-year economic indicator changes</li>
+          <li>Visualisations to support policy understanding and communication</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">SQL</span>
+          <span class="tech-badge">Pandas</span>
+          <span class="tech-badge">Data Visualisation</span>
+          <span class="tech-badge">Gap Analysis</span>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card reveal">
+        <div class="project-number">03</div>
+        <div class="project-icon">🏦</div>
+        <div class="project-title">ATM System — Python + SQL</div>
+        <p class="project-desc">Full-featured banking simulation with integrated Python–MySQL backend, authentication, and transaction logging.</p>
+        <ul class="project-bullets">
+          <li>Banking system with Python & MySQL, authentication & transaction handling</li>
+          <li>Data loading and transformation for deposits, withdrawals, and transfers</li>
+          <li>Transaction logs with timestamps ensuring completeness and audit trails</li>
+          <li>Error handling and data validation for invalid operations</li>
+        </ul>
+        <div class="project-tech">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">MySQL</span>
+          <span class="tech-badge">SQL</span>
+          <span class="tech-badge">Data Integrity</span>
+          <span class="tech-badge">Transaction Logging</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-tag reveal">Experience</div>
+    <h2 class="section-title reveal">Work History</h2>
+
+    <div class="exp-entry reveal">
+      <div class="exp-meta">
+        <div class="exp-period">Internship</div>
+        <div class="exp-company">PinkMoon Technologies</div>
+        <div class="exp-location">Hyderabad, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Web Development Intern</div>
+        <ul class="exp-points">
+          <li>Developed a fully responsive website clone using HTML, CSS, and JavaScript following project specifications.</li>
+          <li>Managed version control with Git and GitHub, collaborating with team members on code management.</li>
+          <li>Followed structured project documentation and delivery processes, improving debugging and front-end skills.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-tag reveal">Certifications</div>
+    <h2 class="section-title reveal">Credentials</h2>
+
+    <div class="cert-grid">
+
+      <div class="cert-card reveal">
+        <div class="cert-logo deloitte">DLT</div>
+        <div class="cert-body">
+          <div class="cert-issuer">Forage · February 2026</div>
+          <div class="cert-title">Deloitte – Data Analytics Job Simulation</div>
+          <div class="cert-date">Verification: 6Su9y4omJGtupWcnQ</div>
+          <ul class="cert-highlights">
+            <li>Practical tasks in Data Analysis and Forensic Technology</li>
+            <li>Simulated real Deloitte analyst workflows</li>
+            <li>Applied analytical thinking to data-driven consulting scenarios</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cert-card reveal">
+        <div class="cert-logo tata">TATA</div>
+        <div class="cert-body">
+          <div class="cert-issuer">Forage · February 2026</div>
+          <div class="cert-title">Tata – Data Visualisation: Empowering Business with Effective Insights</div>
+          <div class="cert-date">Verification: DHfr5JJjSqdwoZPrT</div>
+          <ul class="cert-highlights">
+            <li>Framing business scenarios and choosing the right visuals</li>
+            <li>Creating effective visuals for stakeholder communication</li>
+            <li>Translating complex data findings into clear visual narratives</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-tag reveal">Education</div>
+    <h2 class="section-title reveal">Academic Background</h2>
+
+    <div class="edu-card reveal">
+      <div>
+        <div class="edu-degree">B.Sc. Computer Science<br>& Mathematics</div>
+        <div class="edu-institution">S.L.R. Prathibha Degree College</div>
+        <div class="edu-period">2020 – 2023</div>
+      </div>
+      <div class="gpa-ring">
+        <div class="gpa-val">7.3</div>
+        <div class="gpa-label">GPA / 10</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY STRENGTHS -->
+  <section id="strengths">
+    <div class="section-tag reveal">Strengths</div>
+    <h2 class="section-title reveal">What I Bring</h2>
+    <div class="strengths-grid">
+      <div class="strength-item reveal">
+        <div class="strength-icon">🔍</div>
+        <div class="strength-title">Data Quality & Control</div>
+        <div class="strength-text">Strong foundation in data control, quality management, and structured reporting including Issue Logs, Gap Analysis, and Delta Reports.</div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-icon">⚙️</div>
+        <div class="strength-title">ETL Proficiency</div>
+        <div class="strength-text">Experienced in SQL and Python for data extraction, transformation, and loading—directly aligned with role requirements.</div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-icon">📋</div>
+        <div class="strength-title">Documentation & Training</div>
+        <div class="strength-text">Ability to prepare and deliver training materials and documentation for team members and stakeholders clearly.</div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-icon">🤝</div>
+        <div class="strength-title">Collaborative Mindset</div>
+        <div class="strength-text">Experience in project meetings, version control (Git), and cross-functional coordination to deliver results on time.</div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-icon">📊</div>
+        <div class="strength-title">Business Visualisation</div>
+        <div class="strength-text">Exposure to Power BI for building dashboards and visual reports that support business decisions effectively.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">SK_</div>
+    <div class="footer-text">
+      Sanjay Kumar Ummadisetti · Data Analyst · Hyderabad, India
+    </div>
+    <div class="footer-text">
+      <a href="mailto:ummadisittysanjay@gmail.com" style="color:var(--accent);text-decoration:none;">ummadisittysanjay@gmail.com</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
